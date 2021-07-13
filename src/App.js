@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import _range from 'lodash/range';
 import {
   ARROW_KEYS,
   INITIAL_NUMBER_OF_ROWS,
@@ -11,12 +9,7 @@ import {
 } from './lib/constants';
 import './App.scss';
 import { processMovements } from './lib/utils';
-import ChessTableItem from './components/ChessTableItem/ChessTableItem';
-
-const ChessTable = styled.div`
-  grid-template-columns: repeat(${props => props.cols}, 1fr);
-  grid-template-rows: repeat(${props => props.rows}, 1fr);
-`;
+import ChessTable from './components/ChessTable/ChessTable';
 
 function App() {
   const [numberOfRows, setNumberOfRows] = useState(INITIAL_NUMBER_OF_ROWS);
@@ -238,24 +231,12 @@ function App() {
 
       <main className="App__content">
         <ChessTable
-          className="ChessTable"
           rows={numberOfRows}
           cols={numberOfCols}
-        >
-          {_range(numberOfRows).map(row => {
-            return _range(numberOfCols).map(col => {
-              const key = `${row},${col}`;
-              return <ChessTableItem
-                key={key}
-                row={row}
-                col={col}
-                onItemClick={handleChessTableItemClick}
-                isAMovement={isAMovement}
-                isCurrentPosition={isCurrentPosition}
-              />;
-            });
-          })}
-        </ChessTable>
+          onItemClick={handleChessTableItemClick}
+          isAMovement={isAMovement}
+          isCurrentPosition={isCurrentPosition}
+        />
       </main>
       <footer className="App__footer">
         {

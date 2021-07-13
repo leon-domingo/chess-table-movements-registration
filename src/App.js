@@ -10,6 +10,7 @@ import {
 import './App.scss';
 import { processMovements } from './lib/utils';
 import ChessTable from './components/ChessTable/ChessTable';
+import InputSelector from './components/InputSelector/InputSelector';
 
 function App() {
   const [numberOfRows, setNumberOfRows] = useState(INITIAL_NUMBER_OF_ROWS);
@@ -37,7 +38,7 @@ function App() {
   };
 
   const handleClickDecreaseMovements = () => {
-    if (numberOfMovements > 1) {
+    if (numberOfMovements > 2) {
       setNumberOfMovements(numberOfMovements - 1);
       setIsPathVisible(false);
     }
@@ -138,86 +139,31 @@ function App() {
   return (
     <div className="App">
       <header className="App__header">
-        <div className="App__input">
-          <label htmlFor="numberOfRows"># of rows</label>
-          <input
-            id="numberOfRows"
-            type="number"
-            min="1"
-            step="1"
-            value={numberOfRows}
-            onChange={(e) => setNumberOfRows(e.target.value)}
-          />
-          <div className="App__input__buttons">
-            <button
-              className="App__input__buttons__button"
-              onClick={handleClickIncreaseRows}
-            >
-              <i className="fas fa-angle-up" />
-            </button>
-
-            <button
-              className="App__input__buttons__button"
-              onClick={handleClickDecreaseRows}
-            >
-              <i className="fas fa-angle-down" />
-            </button>
-          </div>
-        </div>
-
-        <div className="App__input">
-          <label htmlFor="numberOfCols"># of cols</label>
-          <input
-            id="numberOfCols"
-            type="number"
-            min="1"
-            step="1"
-            value={numberOfCols}
-            onChange={(e) => setNumberOfCols(e.target.value)}
-          />
-          <div className="App__input__buttons">
-            <button
-              className="App__input__buttons__button"
-              onClick={handleClickIncreaseCols}
-            >
-              <i className="fas fa-angle-up" />
-            </button>
-
-            <button
-              className="App__input__buttons__button"
-              onClick={handleClickDecreaseCols}
-            >
-              <i className="fas fa-angle-down" />
-            </button>
-          </div>
-        </div>
-
-        <div className="App__input">
-          <label htmlFor="numberOfMovements"># of movements</label>
-          <input
-            id="numberOfMovements"
-            type="number"
-            min="1"
-            step="1"
-            value={numberOfMovements}
-            onChange={(e) => setNumberOfMovements(e.target.value)}
-          />
-          <div className="App__input__buttons">
-            <button
-              className="App__input__buttons__button"
-              onClick={handleClickIncreaseMovements}
-            >
-              <i className="fas fa-angle-up" />
-            </button>
-
-            <button
-              className="App__input__buttons__button"
-              onClick={handleClickDecreaseMovements}
-            >
-              <i className="fas fa-angle-down" />
-            </button>
-          </div>
-        </div>
+        <InputSelector
+          inputId="numberOfRowsSelector"
+          labelText={'# of rows'}
+          value={numberOfRows}
+          changeValue={setNumberOfRows}
+          onClickIncrease={handleClickIncreaseRows}
+          onClickDecrease={handleClickDecreaseRows}
+        />
+        <InputSelector
+          inputId="numberOfColsSelector"
+          labelText={'# of cols'}
+          value={numberOfCols}
+          changeValue={setNumberOfCols}
+          onClickIncrease={handleClickIncreaseCols}
+          onClickDecrease={handleClickDecreaseCols}
+        />
+        <InputSelector
+          inputId="numberOfMovementsSelector"
+          labelText={'# of movements'}
+          value={numberOfMovements}
+          minValue={2}
+          changeValue={setNumberOfMovements}
+          onClickIncrease={handleClickIncreaseMovements}
+          onClickDecrease={handleClickDecreaseMovements}
+        />
       </header>
 
       <main className="App__content">
@@ -229,6 +175,7 @@ function App() {
           currentPosition={currentPosition}
         />
       </main>
+
       <footer className="App__footer">
         {
           isPathVisible &&

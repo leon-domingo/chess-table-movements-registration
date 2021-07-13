@@ -30,38 +30,6 @@ $footerBackground: #f9f9f9;
     }
   }
 
-  &__input {
-    display: inline-flex;
-    align-items: center;
-    margin: 0 .5rem;
-
-    label {
-      font-weight: 300;
-      margin-right: .5rem;
-    }
-
-    input {
-      font-weight: 400;
-      padding: .5rem;
-      width: 2rem;
-      text-align: center;
-      border: 1px solid #eee;
-    }
-
-    &__buttons {
-      display: flex;
-      flex-direction: column;
-
-      &__button {
-        width: 1.5rem;
-        height: 1rem;
-        margin: 1px 0;
-        border: 0;
-        font-size: .6rem;
-      }
-    }
-  }
-
   &__content {
     margin: 0 auto;
     width: $innerWidth;

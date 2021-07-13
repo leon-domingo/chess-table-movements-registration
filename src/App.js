@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import _range from 'lodash/range';
-import classNames from 'classnames';
 import {
   ARROW_KEYS,
   INITIAL_NUMBER_OF_ROWS,
@@ -12,6 +11,7 @@ import {
 } from './lib/constants';
 import './App.scss';
 import { processMovements } from './lib/utils';
+import ChessTableItem from './components/ChessTableItem/ChessTableItem';
 
 const ChessTable = styled.div`
   grid-template-columns: repeat(${props => props.cols}, 1fr);
@@ -245,21 +245,14 @@ function App() {
           {_range(numberOfRows).map(row => {
             return _range(numberOfCols).map(col => {
               const key = `${row},${col}`;
-              const itemClass = classNames({
-                ChessTable__item: true,
-                stepped: isAMovement(row, col),
-                'current-position': isCurrentPosition(row, col),
-              });
-              const itemText = `${row}, ${col}`;
-              return (
-                <div
-                  className={itemClass}
-                  key={key}
-                  onClick={() => handleChessTableItemClick(row, col)}
-                >
-                  {itemText}
-                </div>
-              );
+              return <ChessTableItem
+                key={key}
+                row={row}
+                col={col}
+                onItemClick={handleChessTableItemClick}
+                isAMovement={isAMovement}
+                isCurrentPosition={isCurrentPosition}
+              />;
             });
           })}
         </ChessTable>
@@ -277,7 +270,10 @@ function App() {
             {`${numberOfMovements - movements.length} movements left`}
           </div>
         }
-        {isStartState() && <div className="App__footer__start">Click on a cell to start!</div>}
+        {
+          isStartState() &&
+          <div className="App__footer__start">Click on a cell to start!</div>
+        }
       </footer>
     </div>
   );

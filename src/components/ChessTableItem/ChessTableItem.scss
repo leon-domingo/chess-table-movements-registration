@@ -1,0 +1,27 @@
+.ChessTableItem {
+  padding: 1rem;
+  background-color: #eee;
+  color: #777;
+  text-align: center;
+  font-size: .7rem;
+  border: .25rem solid transparent;
+  border-radius: .5rem;
+  cursor: pointer;
+
+  &.current-position {
+    border-color: #000;
+    color: #000;
+  }
+
+  &.stepped {
+    font-weight: 700;
+    background-color: yellow;
+    color: #000;
+  }
+
+  &:hover {
+    background-color: rgb(240, 187, 88);
+    color: #fff;
+    font-weight: 700;
+  }
+}

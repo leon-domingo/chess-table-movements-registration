@@ -31,15 +31,6 @@ function App() {
     currentPosition.col === NULL_POSITION.col
   ) && (movements.length < numberOfMovements);
 
-  const isCurrentPosition = (row, col) => (
-    currentPosition.row === row &&
-    currentPosition.col === col
-  );
-
-  const isAMovement = (row, col) => {
-    return !!movements.find(movement => movement.row === row && movement.col === col);
-  };
-
   const handleClickIncreaseMovements = () => {
     setNumberOfMovements(numberOfMovements + 1);
     setIsPathVisible(false);
@@ -234,8 +225,8 @@ function App() {
           rows={numberOfRows}
           cols={numberOfCols}
           onItemClick={handleChessTableItemClick}
-          isAMovement={isAMovement}
-          isCurrentPosition={isCurrentPosition}
+          movements={movements}
+          currentPosition={currentPosition}
         />
       </main>
       <footer className="App__footer">

@@ -12,10 +12,18 @@ const ChessTable = ({
   rows,
   cols,
   onItemClick,
-  isAMovement,
-  isCurrentPosition,
+  movements,
+  currentPosition,
 }) => {
-  console.log(rows, cols);
+  const isCurrentPosition = (row, col) => (
+    currentPosition.row === row &&
+    currentPosition.col === col
+  );
+
+  const isAMovement = (row, col) => {
+    return !!movements.find(movement => movement.row === row && movement.col === col);
+  };
+
   return (
     <ChessTableStyled
       className="ChessTable"

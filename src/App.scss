@@ -1,0 +1,103 @@
+$innerWidth: 1140px;
+$footerBackground: #f9f9f9;
+
+.App {
+  &__header {
+    width: $innerWidth;
+    max-width: 100%;
+    margin: 0 auto 1rem;
+    background-color: #f9f9f9;
+  }
+
+  &__footer {
+    width: $innerWidth;
+    max-width: 100%;
+    margin: 0 auto 1rem;
+
+    &__start {
+      font-size: 2rem;
+      text-align: center;
+      margin: 1rem 0;
+      padding: 2rem;
+      background-color: $footerBackground;
+    }
+
+    &__movements-list {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background-color: $footerBackground;
+    }
+  }
+
+  &__input {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 .5rem;
+
+    label {
+      font-weight: 300;
+      margin-right: .5rem;
+    }
+
+    input {
+      font-weight: 400;
+      padding: .5rem;
+      width: 2rem;
+      text-align: center;
+      border: 1px solid #eee;
+    }
+
+    &__buttons {
+      display: flex;
+      flex-direction: column;
+
+      &__button {
+        width: 1.5rem;
+        height: 1rem;
+        margin: 1px 0;
+        border: 0;
+        font-size: .6rem;
+      }
+    }
+  }
+
+  &__content {
+    margin: 0 auto;
+    width: $innerWidth;
+    max-width: 100%;
+  }
+
+  .ChessTable {
+    display: grid;
+    grid-gap: .5rem;
+
+    &__item {
+      padding: 1rem;
+      background-color: #eee;
+      color: #777;
+      text-align: center;
+      font-size: .7rem;
+      border: .25rem solid transparent;
+      border-radius: .5rem;
+      cursor: pointer;
+
+      &.current-position {
+        border-color: #000;
+        color: #000;
+      }
+
+      &.stepped {
+        font-weight: 700;
+        background-color: yellow;
+        color: #000;
+      }
+
+      &:hover {
+        background-color: rgb(240, 187, 88);
+        color: #fff;
+        font-weight: 700;
+      }
+    }
+  }
+}

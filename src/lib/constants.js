@@ -7,6 +7,8 @@ export const ARROW_KEYS = {
 
 export const STEP = 1;
 export const NULL_POSITION = { row: -1, col: -1 };
+export const MIN_NUMBER_OF_ROWS = 2;
+export const MIN_NUMBER_OF_COLS = 2;
 export const INITIAL_NUMBER_OF_ROWS = 10;
 export const INITIAL_NUMBER_OF_COLS = 10;
 export const INITIAL_NUMBER_OF_MOVEMENTS = 10;

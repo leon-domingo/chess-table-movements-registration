@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
   ARROW_KEYS,
+  MIN_NUMBER_OF_ROWS,
+  MIN_NUMBER_OF_COLS,
   INITIAL_NUMBER_OF_ROWS,
   INITIAL_NUMBER_OF_COLS,
   INITIAL_NUMBER_OF_MOVEMENTS,
@@ -50,7 +52,7 @@ function App() {
   };
 
   const handleClickDecreaseRows = () => {
-    if (numberOfRows > 1) {
+    if (numberOfRows > 2) {
       setNumberOfRows(numberOfRows - 1);
       setIsPathVisible(false);
     }
@@ -62,7 +64,7 @@ function App() {
   };
 
   const handleClickDecreaseCols = () => {
-    if (numberOfCols > 1) {
+    if (numberOfCols > 2) {
       setNumberOfCols(numberOfCols - 1);
       setIsPathVisible(false);
     }
@@ -143,6 +145,7 @@ function App() {
           inputId="numberOfRowsSelector"
           labelText={'# of rows'}
           value={numberOfRows}
+          minValue={MIN_NUMBER_OF_ROWS}
           changeValue={setNumberOfRows}
           onClickIncrease={handleClickIncreaseRows}
           onClickDecrease={handleClickDecreaseRows}
@@ -151,6 +154,7 @@ function App() {
           inputId="numberOfColsSelector"
           labelText={'# of cols'}
           value={numberOfCols}
+          minValue={MIN_NUMBER_OF_COLS}
           changeValue={setNumberOfCols}
           onClickIncrease={handleClickIncreaseCols}
           onClickDecrease={handleClickDecreaseCols}

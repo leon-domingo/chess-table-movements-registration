@@ -33,10 +33,13 @@ const ChessTable = ({
       {_range(rows).map(row => {
         return _range(cols).map(col => {
           const key = `${row},${col}`;
+          const step = movements
+            .findIndex(movement => movement.row === row && movement.col === col);
           return <ChessTableItem
             key={key}
             row={row}
             col={col}
+            step={step !== -1 ? step : null}
             onItemClick={onItemClick}
             isAMovement={isAMovement}
             isCurrentPosition={isCurrentPosition}

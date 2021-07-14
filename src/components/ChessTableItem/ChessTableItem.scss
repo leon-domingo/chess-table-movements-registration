@@ -1,14 +1,23 @@
 .ChessTableItem {
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #eee;
-  color: #777;
+  color: #000;
   text-align: center;
-  font-size: .7rem;
-  border: .25rem solid transparent;
-  border-radius: .5rem;
+  font-size: 2rem;
+  height: 2rem;
+  padding: 1rem;
   cursor: pointer;
 
+  &.is-black {
+    background-color: #000;
+    color: #fff;
+  }
+
   &.current-position {
+    background-color: green;
     border-color: #000;
     color: #000;
   }

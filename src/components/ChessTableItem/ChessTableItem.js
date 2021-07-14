@@ -4,6 +4,7 @@ import './ChessTableItem.scss';
 const ChessTableItem = ({
   row,
   col,
+  step,
   onItemClick,
   isAMovement,
   isCurrentPosition,
@@ -12,8 +13,9 @@ const ChessTableItem = ({
     ChessTableItem: true,
     stepped: isAMovement(row, col),
     'current-position': isCurrentPosition(row, col),
+    'is-black': (row % 2 === 0 && col % 2 === 0) || (row % 2 !== 0 && col % 2 !== 0),
   });
-  const itemText = `${row}, ${col}`;
+  const itemText = step !== null ? step + 1 : '';
   return (
     <div
       className={itemClass}

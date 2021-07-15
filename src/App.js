@@ -1,71 +1,75 @@
-import { useState, useEffect } from 'react';
+import { useState, useReducer, useEffect } from 'react';
 import {
   ARROW_KEYS,
   MIN_NUMBER_OF_ROWS,
   MIN_NUMBER_OF_COLS,
-  INITIAL_NUMBER_OF_ROWS,
-  INITIAL_NUMBER_OF_COLS,
-  INITIAL_NUMBER_OF_MOVEMENTS,
   NULL_POSITION,
   STEP,
 } from './lib/constants';
-import './App.scss';
 import { processMovements } from './lib/utils';
 import ChessTable from './components/ChessTable/ChessTable';
 import InputSelector from './components/InputSelector/InputSelector';
+import {
+  chessTableReducer,
+  initialChessTableState,
+  chessTableActionTypes,
+} from './lib/table-reducer';
+import './App.scss';
 
 function App() {
-  const [numberOfRows, setNumberOfRows] = useState(INITIAL_NUMBER_OF_ROWS);
-  const [numberOfCols, setNumberOfCols] = useState(INITIAL_NUMBER_OF_COLS);
-  const [numberOfMovements, setNumberOfMovements] = useState(INITIAL_NUMBER_OF_MOVEMENTS);
-  const [movements, setMovements] = useState([]);
+  const [tableState, tableDispatch] = useReducer(chessTableReducer, initialChessTableState);
   const [currentPosition, setCurrentPosition] = useState({ ...NULL_POSITION });
   const [isPathVisible, setIsPathVisible] = useState(false);
 
-  const isStartState = () => (
-    (
-      currentPosition.row === NULL_POSITION.row &&
-      currentPosition.col === NULL_POSITION.col
-    ) || movements.length === numberOfMovements
-  );
-
-  const isPathInProgress = () => !(
+  const isCurrentPositionNullPosition = () => (
     currentPosition.row === NULL_POSITION.row &&
     currentPosition.col === NULL_POSITION.col
-  ) && (movements.length < numberOfMovements);
+  );
+
+  const isEndOfMovements = () => tableState.movements.length === tableState.numberOfMovements;
+
+  const isStartState = () => (
+    isCurrentPositionNullPosition() ||
+    isEndOfMovements()
+  );
+
+  const isPathInProgress = () => (
+    !isCurrentPositionNullPosition() &&
+    !isEndOfMovements()
+  );
 
   const handleClickIncreaseMovements = () => {
-    setNumberOfMovements(numberOfMovements + 1);
+    tableDispatch({ type: chessTableActionTypes.INC_NUM_MOVEMENTS });
     setIsPathVisible(false);
   };
 
   const handleClickDecreaseMovements = () => {
-    if (numberOfMovements > 2) {
-      setNumberOfMovements(numberOfMovements - 1);
+    if (tableState.numberOfMovements > 2) {
+      tableDispatch({ type: chessTableActionTypes.DEC_NUM_MOVEMENTS });
       setIsPathVisible(false);
     }
   };
 
   const handleClickIncreaseRows = () => {
-    setNumberOfRows(numberOfRows + 1);
+    tableDispatch({ type: chessTableActionTypes.INC_ROWS });
     setIsPathVisible(false);
   };
 
   const handleClickDecreaseRows = () => {
-    if (numberOfRows > 2) {
-      setNumberOfRows(numberOfRows - 1);
+    if (tableState.numberOfRows > 2) {
+      tableDispatch({ type: chessTableActionTypes.DEC_ROWS });
       setIsPathVisible(false);
     }
   };
 
   const handleClickIncreaseCols = () => {
-    setNumberOfCols(numberOfCols + 1);
+    tableDispatch({ type: chessTableActionTypes.INC_COLS });
     setIsPathVisible(false);
   };
 
   const handleClickDecreaseCols = () => {
-    if (numberOfCols > 2) {
-      setNumberOfCols(numberOfCols - 1);
+    if (tableState.numberOfCols > 2) {
+      tableDispatch({ type: chessTableActionTypes.DEC_COLS });
       setIsPathVisible(false);
     }
   };
@@ -73,19 +77,25 @@ function App() {
   const handleChessTableItemClick = (row, col) => {
     const initialPosition = { row, col };
     setCurrentPosition({ ...initialPosition });
-    setMovements([{ ...initialPosition }]);
+    tableDispatch({
+      type: chessTableActionTypes.SET_MOVEMENTS,
+      payload: [{ ...initialPosition }],
+    });
     setIsPathVisible(false);
   };
 
   useEffect(() => {
     const appendMovement = ({ row, col }) => {
-      const movementsLength = movements.length;
-      setMovements([...movements, { row, col }]);
-      setIsPathVisible(movementsLength === numberOfMovements - 1);
+      const movementsLength = tableState.movements.length;
+      tableDispatch({
+        type: chessTableActionTypes.APPEND_MOVEMENT,
+        payload: { row, col },
+      });
+      setIsPathVisible(movementsLength === tableState.numberOfMovements - 1);
     };
 
     const handleKeyDown = event => {
-      if (movements.length === numberOfMovements) {
+      if (tableState.movements.length === tableState.numberOfMovements) {
         return;
       }
 
@@ -107,14 +117,14 @@ function App() {
           };
         }
       } else if (keyCode === ARROW_KEYS.RIGHT) {
-        if (col < numberOfCols - 1) {
+        if (col < tableState.numberOfCols - 1) {
           newPosition = {
             row,
             col: col + 1,
           };
         }
       } else if (keyCode === ARROW_KEYS.DOWN) {
-        if (row < numberOfRows - 1) {
+        if (row < tableState.numberOfRows - 1) {
           newPosition = {
             row: row + 1,
             col,
@@ -130,12 +140,9 @@ function App() {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [
-    movements,
+    tableState,
     currentPosition,
     setCurrentPosition,
-    numberOfCols,
-    numberOfRows,
-    numberOfMovements,
   ]);
 
   return (
@@ -143,28 +150,37 @@ function App() {
       <header className="App__header">
         <InputSelector
           inputId="numberOfRowsSelector"
-          labelText={'# of rows'}
-          value={numberOfRows}
+          labelText="# of rows"
+          value={tableState.numberOfRows}
           minValue={MIN_NUMBER_OF_ROWS}
-          changeValue={setNumberOfRows}
+          changeValue={(rows) => tableDispatch({
+            type: chessTableActionTypes.SET_ROWS,
+            payload: +rows,
+          })}
           onClickIncrease={handleClickIncreaseRows}
           onClickDecrease={handleClickDecreaseRows}
         />
         <InputSelector
           inputId="numberOfColsSelector"
-          labelText={'# of cols'}
-          value={numberOfCols}
+          labelText="# of cols"
+          value={tableState.numberOfCols}
           minValue={MIN_NUMBER_OF_COLS}
-          changeValue={setNumberOfCols}
+          changeValue={(cols) => tableDispatch({
+            type: chessTableActionTypes.SET_COLS,
+            payload: +cols,
+          })}
           onClickIncrease={handleClickIncreaseCols}
           onClickDecrease={handleClickDecreaseCols}
         />
         <InputSelector
           inputId="numberOfMovementsSelector"
-          labelText={'# of movements'}
-          value={numberOfMovements}
+          labelText="# of movements"
+          value={tableState.numberOfMovements}
           minValue={2}
-          changeValue={setNumberOfMovements}
+          changeValue={(noOfMovements) => tableDispatch({
+            type: chessTableActionTypes.SET_NUM_MOVEMENTS,
+            payload: +noOfMovements,
+          })}
           onClickIncrease={handleClickIncreaseMovements}
           onClickDecrease={handleClickDecreaseMovements}
         />
@@ -172,10 +188,10 @@ function App() {
 
       <main className="App__content">
         <ChessTable
-          rows={numberOfRows}
-          cols={numberOfCols}
+          rows={tableState.numberOfRows}
+          cols={tableState.numberOfCols}
           onItemClick={handleChessTableItemClick}
-          movements={movements}
+          movements={tableState.movements}
           currentPosition={currentPosition}
         />
       </main>
@@ -184,13 +200,13 @@ function App() {
         {
           isPathVisible &&
           <div className="App__footer__movements-list">
-            {processMovements(movements)}
+            {processMovements(tableState.movements)}
           </div>
         }
         {
           isPathInProgress() &&
           <div className="App__footer__start">
-            {`${numberOfMovements - movements.length} movements left`}
+            {`${tableState.numberOfMovements - tableState.movements.length} movements left`}
           </div>
         }
         {
